@@ -20,7 +20,6 @@ namespace Inventory_Management.Utils.Extensions
             }
             finally
             {
-
                 Mouse.OverrideCursor = null;
             }
         }

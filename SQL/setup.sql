@@ -96,3 +96,48 @@ TABLESPACE pg_default;
 
 ALTER TABLE public."Allocation"
     OWNER to postgres;
+
+CREATE OR REPLACE PROCEDURE allocate_records(
+	receiptid integer,
+	receivedid integer)
+LANGUAGE 'plpgsql'
+AS $BODY$
+DECLARE
+    received_allocated INT;
+	receipt_allocated INT;
+	received_quantity INT;
+	receipt_quantity INT;
+	received_available INT;
+	receipt_needed INT;
+	allocated_quantity INT;
+BEGIN
+	-- Each tuple of ids must have one and only one record, delete then reallocate.
+	DELETE FROM public."Allocation" as a
+	WHERE a."ReceiptId" = receiptid AND a."ReceivedId" = receivedid;
+
+    SELECT COALESCE(SUM(Allocated_Quantity), 0)
+    INTO received_allocated
+    FROM public."Allocation" as a
+    WHERE a."ReceivedId" = ReceivedId;
+
+    SELECT COALESCE(SUM(Allocated_Quantity), 0)
+    INTO receipt_allocated
+    FROM public."Allocation" as a
+    WHERE a."ReceiptId" = ReceiptId;
+
+    SELECT "Quantity" INTO received_quantity
+    FROM public."Record" as r WHERE r."Id" = ReceivedId;
+
+    SELECT "Quantity" INTO receipt_quantity
+    FROM public."Record" as r WHERE r."Id" = ReceiptId;
+
+    SELECT (received_quantity - received_allocated) INTO received_available;
+    SELECT (receipt_quantity - receipt_allocated) INTO receipt_needed;
+
+    SELECT (LEAST(received_available, receipt_needed)) INTO allocated_quantity;
+
+    IF (allocated_quantity > 0) THEN
+        INSERT INTO public."Allocation" VALUES (ReceiptId, ReceivedId, allocated_quantity);
+    END IF;
+END
+$BODY$;
