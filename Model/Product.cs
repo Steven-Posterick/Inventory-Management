@@ -17,6 +17,7 @@ namespace Inventory_Management.Model
         public decimal? Price { get; set; }
         public decimal? Cost { get; set; }
 
+        public virtual ReceivedRecord ReceivedRecord { get; set; }
         public virtual ICollection<Record> Records { get; set; }
     }
 }

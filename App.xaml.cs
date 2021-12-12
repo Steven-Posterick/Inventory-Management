@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Inventory_Management.Context;
 using Inventory_Management.Model;
+using Inventory_Management.Utils;
 using Inventory_Management.View.Allocation;
 using Inventory_Management.View.MainWindow;
 using Inventory_Management.View.Product;
@@ -19,6 +20,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Npgsql;
+using Prism.Events;
 
 namespace Inventory_Management
 {
@@ -51,6 +53,10 @@ namespace Inventory_Management
                     services.AddTransient<RecordEntry>();
                     services.AddTransient<ProductList>();
                     services.AddTransient<ProductEntry>();
+                    
+                    // Services
+                    services.AddSingleton<IEventAggregator, EventAggregator>();
+                    services.AddSingleton<IMessage, Message>();
 
                     services.AddDbContext<InventoryManagementContext>(options =>
                     {

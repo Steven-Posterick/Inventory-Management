@@ -3,10 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Inventory_Management.View.Product"
+        xmlns:vm="clr-namespace:Inventory_Management.ViewModel.Product"
+        xmlns:valueConverters="clr-namespace:ValueConverters;assembly=ValueConverters"
         mc:Ignorable="d"
-        Title="ProductEntry" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance vm:ProductEntryViewModel}"
+        Title="Product Entry" Height="400" Width="767">
+    
+    <Window.Resources>
+        <ResourceDictionary> 
+            <valueConverters:StringToDecimalConverter x:Key="DecimalConverter"/> 
+        </ResourceDictionary> 
+    </Window.Resources>
+    
     <Grid>
         
+        <TextBox Text="{Binding Id}" HorizontalAlignment="Left" Margin="105,22,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" IsEnabled="False"/>
+        <Label Content="Product Id" HorizontalAlignment="Left" Margin="10,18,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Description}" HorizontalAlignment="Left" Margin="105,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Label Content="Description:" HorizontalAlignment="Left" Margin="10,49,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Price, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Margin="105,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Label Content="Price:" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top"/>
+        <TextBox Text="{Binding Cost, Converter={StaticResource DecimalConverter}}" HorizontalAlignment="Left" Margin="105,115,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+        <Label Content="Cost:" HorizontalAlignment="Left" Margin="10,111,0,0" VerticalAlignment="Top"/>
+        
+        <Button Command="{Binding SaveProduct}" Content="Save Product" HorizontalAlignment="Left" Margin="10,278,0,0" VerticalAlignment="Top" Height="32" Width="110"/>
+        <Button Command="{Binding OpenReceive}" Content="Receive Product" HorizontalAlignment="Left" Margin="130,278,0,0" VerticalAlignment="Top" Height="32" Width="110"/>
+        <Button Command="{Binding OpenSell}" Content="Sell Product" HorizontalAlignment="Left" Margin="250,278,0,0" VerticalAlignment="Top" Height="32" Width="110"/>
+        <Button Command="{Binding OpenRecordList}" Content="View Records" HorizontalAlignment="Left" Margin="370,278,0,0" VerticalAlignment="Top" Height="32" Width="110"/>
     </Grid>
 </Window>

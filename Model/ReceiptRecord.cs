@@ -15,7 +15,7 @@ namespace Inventory_Management.Model
         public int Id { get; set; }
         public decimal? Price { get; set; }
 
-        public virtual Record Record { get; set; }
+        public virtual Record IdNavigation { get; set; }
         public virtual ICollection<Allocation> Allocations { get; set; }
     }
 }
