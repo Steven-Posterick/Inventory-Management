@@ -7,6 +7,25 @@
         mc:Ignorable="d"
         Title="RecordList" Height="450" Width="800">
     <Grid>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical" Margin="10">
+                <Label Content="Id" />
+                <TextBox Width="80" Text="{Binding Id}" Padding="5"/>
+                <!--Buttons-->
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+                    <Button Padding="5" Margin="10" Width="90" Height="44" Content="Refresh" Command="{Binding RefreshList}" />
+                    <Button Padding="5" Margin="10" Width="90" Height="44" Content="Add Record" Command="{Binding Record}" />
+                </StackPanel>
+            </StackPanel>
+            <ListView Width="446" Height="246" ItemsSource="{Binding DataContext.RecordEntries}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+        </StackPanel>
         
     </Grid>
 </Window>
