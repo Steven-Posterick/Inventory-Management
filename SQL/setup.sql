@@ -15,9 +15,6 @@ CREATE TABLE IF NOT EXISTS public."Product"
 ALTER TABLE public."Product"
     OWNER to postgres;
 
-ALTER TABLE public."Allocation"
-    OWNER to postgres;
-
 -- Table: public.Record
 -- DROP TABLE public."Record";
 
@@ -96,3 +93,6 @@ CREATE TABLE IF NOT EXISTS public."Allocation"
 )
 
 TABLESPACE pg_default;
+
+ALTER TABLE public."Allocation"
+    OWNER to postgres;
