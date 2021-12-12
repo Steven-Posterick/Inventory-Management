@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using Inventory_Management.Context;
 using Inventory_Management.Utils;
@@ -35,8 +36,14 @@ namespace Inventory_Management.ViewModel.Product
         public int Id
         {
             get => _id;
-            set => SetProperty(ref _id, value);
+            set
+            {
+                SetProperty(ref _id, value);
+                OnPropertyChanged(nameof(IsCreated));
+            }
         }
+        
+        public bool IsCreated => Id != 0;
 
         public string Description
         {
@@ -134,8 +141,36 @@ namespace Inventory_Management.ViewModel.Product
             _eventAggregator.GetEvent<OpenProductEvent>().Publish(product.Id);
         }
         
-        public ICommand SaveProduct => CommandHelper.CreateCommandAsync(OnSaveProduct);
         
+        private async Task OnDeleteProduct()
+        {
+            if (MessageBox.Show("Are you sure you would like to delete this product?", "Delete Product?", MessageBoxButton.YesNo) != MessageBoxResult.Yes) return;
+            
+            using var scope = ServiceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
+
+            var product = await dbContext.Products.FirstOrDefaultAsync(r => r.Id == Id);
+            if (product != null)
+            {
+                // Remove the product
+                dbContext.Products.Remove(product);
+                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                _message.Notify($"Failed to find product with id {Id}");
+            }
+            
+            // Close the current product entry screen.
+            _eventAggregator.GetEvent<CloseProductEntryEvent>().Publish();
+            
+            // Reload the list
+            _eventAggregator.GetEvent<RefreshProductListEvent>().Publish();
+        }
+        
+        public ICommand SaveProduct => CommandHelper.CreateCommandAsync(OnSaveProduct);
+        public ICommand DeleteProduct => CommandHelper.CreateCommandAsync(OnDeleteProduct);
+
         /// <summary>
         /// TODO: Create the open receive/sell (will be the same screen, just different parameter)
         /// TODO: Add open Record List will be a Pub/Sub that passes in the product id for the search.

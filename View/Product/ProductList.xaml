@@ -13,19 +13,19 @@
             <!--Search Fields-->
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical" Margin="10">
-                    <Label Content="Id"/>
-                    <TextBox Width="80" Text="{Binding Id}"/>
+                    <Label Content="Id" />
+                    <TextBox Width="80" Text="{Binding Id}" Padding="5"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Margin="10">
                     <Label Content="Description"/>
-                    <TextBox Width="100" Text="{Binding Description}"/>
+                    <TextBox Width="100" Text="{Binding Description}" Padding="5"/>
                 </StackPanel>
             </StackPanel>
             
             <!--Buttons-->
-            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Button Padding="5" Margin="10" Width="90" Height="40" Content="Refresh" Command="{Binding RefreshList}" />
-                <Button Padding="5" Margin="10" Width="90" Height="40" Content="Add Product" Command="{Binding CreateProduct}" />
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+                <Button Padding="5" Margin="10" Width="90" Height="44" Content="Refresh" Command="{Binding RefreshList}" />
+                <Button Padding="5" Margin="10" Width="90" Height="44" Content="Add Product" Command="{Binding CreateProduct}" />
             </StackPanel>
         </StackPanel>
         
