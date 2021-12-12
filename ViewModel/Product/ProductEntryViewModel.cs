@@ -7,7 +7,10 @@ using Inventory_Management.Context;
 using Inventory_Management.Utils;
 using Inventory_Management.Utils.Command;
 using Inventory_Management.Utils.Events.Product;
+using Inventory_Management.Utils.Events.Record;
 using Inventory_Management.Utils.Extensions;
+using Inventory_Management.View.Product;
+using Inventory_Management.View.Record;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prism.Events;
@@ -167,10 +170,20 @@ namespace Inventory_Management.ViewModel.Product
             // Reload the list
             _eventAggregator.GetEvent<RefreshProductListEvent>().Publish();
         }
+
+        private void OnOpenRecordList()
+        {
+            OpenOrActivate<RecordList>(() =>
+            {
+                _eventAggregator.GetEvent<SetProductIdForRecordList>().Publish(Id.ToString());
+                _eventAggregator.GetEvent<RefreshRecordList>().Publish();
+            });
+        }
         
         public ICommand SaveProduct => CommandHelper.CreateCommandAsync(OnSaveProduct);
         public ICommand DeleteProduct => CommandHelper.CreateCommandAsync(OnDeleteProduct);
-
+        public ICommand OpenRecordList => CommandHelper.CreateCommand(OnOpenRecordList);
+        
         /// <summary>
         /// TODO: Create the open receive/sell (will be the same screen, just different parameter)
         /// TODO: Add open Record List will be a Pub/Sub that passes in the product id for the search.
@@ -178,6 +191,5 @@ namespace Inventory_Management.ViewModel.Product
         /// <exception cref="NotImplementedException"></exception>
         public ICommand OpenReceive => CommandHelper.CreateCommand(()=> throw new NotImplementedException());
         public ICommand OpenSell => CommandHelper.CreateCommand(()=> throw new NotImplementedException());
-        public ICommand OpenRecordList => CommandHelper.CreateCommand(()=> throw new NotImplementedException());
     }
 }

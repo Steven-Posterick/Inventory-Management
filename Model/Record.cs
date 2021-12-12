@@ -14,5 +14,6 @@ namespace Inventory_Management.Model
 
         public virtual Product Product { get; set; }
         public virtual ReceiptRecord ReceiptRecord { get; set; }
+        public virtual ReceivedRecord ReceivedRecord { get; set; }
     }
 }

@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Inventory_Management.Utils.Events.Allocation;
+using Prism.Events;
 
 namespace Inventory_Management.ViewModel.Allocation
 {
-    public interface IAllocationEntryViewModel : IOpenWithId<(int ReceiptId, int ReceiveId)> { }
+    public interface IAllocationEntryViewModel { }
     
     public class AllocationEntryViewModel : BaseViewModel, IAllocationEntryViewModel
     {
-        public AllocationEntryViewModel(IServiceProvider serviceProvider) : base(serviceProvider) { }
+        public AllocationEntryViewModel(IServiceProvider serviceProvider, IEventAggregator eventAggregator) : base(serviceProvider)
+        {
+            eventAggregator.GetEvent<OpenAllocationEvent>().Subscribe(x =>
+            {
+                var (receiptId, receiveId) = x;
+                OpenAllocation(receiptId, receiveId);
+            });
+        }
 
-        public Task OpenWithId((int ReceiptId, int ReceiveId) id) { throw new NotImplementedException(); }
+        private void OpenAllocation(int receiptId, int receivedId)
+        {
+            
+        }
     }
 }
