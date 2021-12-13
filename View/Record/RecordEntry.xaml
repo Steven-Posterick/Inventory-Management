@@ -3,10 +3,65 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Inventory_Management.View.Record"
+        xmlns:model="clr-namespace:Inventory_Management.Model"
+        xmlns:record="clr-namespace:Inventory_Management.ViewModel.Record"
+        xmlns:valueConverters="clr-namespace:ValueConverters;assembly=ValueConverters"
         mc:Ignorable="d"
-        Title="RecordEntry" Height="450" Width="800">
-    <Grid>
+        d:DataContext="{d:DesignInstance record:RecordEntryViewModel}"
+        Title="Record Entry" Height="450" Width="800">
+    <Window.Resources>
+        <ResourceDictionary> 
+            <valueConverters:StringToDecimalConverter x:Key="StringToDecimal"/> 
+        </ResourceDictionary> 
+    </Window.Resources>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Id: " Padding="5"/>
+                    <Label Content="Product Id: " Padding="5"/>
+                    <Label Content="Quantity: " Padding="5"/>
+                    <Label Content="{Binding ValueDisplay}" Padding="5"/>
+                    <Label Content="Date: " Padding="5"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBox Width="80" Text="{Binding Id}" IsEnabled="False" Padding="5"/>
+                    <TextBox Width="80" Text="{Binding ProductId}" IsEnabled="False" Padding="5"/>
+                    <TextBox Width="80" Text="{Binding Quantity, Converter={StaticResource StringToDecimal}}" 
+                             IsEnabled="{Binding CanSetQuantity}" Padding="5"/>
+                    <TextBox Width="80" Text="{Binding Value, Converter={StaticResource StringToDecimal}}" 
+                             Padding="5"/>
+                    <TextBox Width="80" Text="{Binding Date}" IsEnabled="False" Padding="5"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel>
+                <Button Content="Delete" IsEnabled="{Binding CanDelete}" Command="{Binding DeleteRecord}"/>
+                <Button Content="Fill" IsEnabled="{Binding CanFill}" Command="{Binding FillRecord}"/>
+                <Button Content="Release" IsEnabled="{Binding CanRelease}" Command="{Binding ReleaseRecord}"/>
+            </StackPanel>
+        </StackPanel>
         
-    </Grid>
+        <ListView DockPanel.Dock="Right"
+                  d:DataContext="{d:DesignInstance model:Allocation}"
+                  ItemsSource="{Binding DataContext.Allocations, RelativeSource={RelativeSource AncestorType=Window}}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="80" Header="Receipt Id">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Padding="2" Margin="3" Content="Open" Command="{Binding DataContext.OpenAllocation, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                            CommandParameter="{Binding Reference}"/>
+                                    <TextBlock Padding="2" Margin="3" Text="{Binding ReceiptId}"/> 
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="140" Header="Received Id" DisplayMemberBinding="{Binding ReceivedId}" />
+                    <GridViewColumn Width="140" Header="Amount Allocated" DisplayMemberBinding="{Binding AllocatedQuantity}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        
+    </DockPanel>
 </Window>

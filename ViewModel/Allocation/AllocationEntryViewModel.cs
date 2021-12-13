@@ -13,8 +13,7 @@ namespace Inventory_Management.ViewModel.Allocation
         {
             eventAggregator.GetEvent<OpenAllocationEvent>().Subscribe(x =>
             {
-                var (receiptId, receiveId) = x;
-                OpenAllocation(receiptId, receiveId);
+                OpenAllocation(x.ReceiptId, x.ReceivedId);
             });
         }
 
