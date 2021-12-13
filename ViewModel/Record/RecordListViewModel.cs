@@ -88,9 +88,6 @@ namespace Inventory_Management.ViewModel.Record
 
         private async Task OnRefreshList()
         {
-            // TODO: Query the list by the Id + ProductId
-            // TODO: If parsed id = 0, then ignore, if parsed ProductId = 0, then ignore.
-            // TODO: Add a selector to either query by Receive or by Receipt
             using var scope = ServiceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
 
@@ -113,10 +110,19 @@ namespace Inventory_Management.ViewModel.Record
 
             RecordEntries = (await queryable.ToListAsync()).ToObservable();
         }
-        
-        
-        
-        private void OnOpenRecord(int id)
+
+        /// <summary>
+        /// Creating a record will open product entry screen without an id.
+        /// </summary>
+        private void OnCreateRecord() => OpenRecordEntry();
+
+        /// <summary>
+        /// Opening a record simply has an id of not 0.
+        /// </summary>
+        /// <param name="id"></param>
+        private void OnOpenRecord(int id) => OpenRecordEntry(id);
+
+        private void OpenRecordEntry(int id = 0)
         {
             OpenOrActivate<RecordEntry>(() =>
             {
@@ -125,6 +131,7 @@ namespace Inventory_Management.ViewModel.Record
         }
         
         public ICommand RefreshList => CommandHelper.CreateCommandAsync(OnRefreshList);
-        public ICommand OpenRecord => CommandHelper.CreateCommand<int>(OnOpenRecord);
+        public ICommand CreateRecord => CommandHelper.CreateCommand(OnCreateRecord);
+        public ICommand OpenRecord => CommandHelper.CreateCommand<int>(OpenRecordEntry);
     }
 }
