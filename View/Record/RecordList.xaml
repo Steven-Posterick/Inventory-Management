@@ -28,7 +28,7 @@
         </StackPanel>
         <ListView DockPanel.Dock="Bottom"
                   d:DataContext="{d:DesignInstance model:Product}"
-                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}">
+                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}" Height="414">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="80" Header="Id">
@@ -36,7 +36,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Padding="2" Margin="3" Content="Open" Command="{Binding DataContext.OpenRecord, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Id}"/>
-                                    <TextBlock Padding="2" Margin="3" Text="{Binding Id}"/> 
+                                    <TextBlock Padding="2" Margin="3" Text="{Binding Id}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -50,5 +50,10 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <StackPanel Width="980" Height="114">
+            <RadioButton Content="All" Height="20" Checked="RadioButton_Checked"/>
+            <RadioButton Content="Receipts" Height="18"/>
+            <RadioButton Content="Received"/>
+        </StackPanel>
     </DockPanel>
 </Window>

@@ -10,5 +10,10 @@ namespace Inventory_Management.View.Record
             InitializeComponent();
             DataContext = viewModel;
         }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
