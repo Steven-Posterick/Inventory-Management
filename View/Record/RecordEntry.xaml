@@ -12,32 +12,33 @@
     <Window.Resources>
         <ResourceDictionary> 
             <valueConverters:StringToDecimalConverter x:Key="StringToDecimal"/> 
+            <valueConverters:BoolToVisibilityConverter x:Key="BoolToVis"/> 
         </ResourceDictionary> 
     </Window.Resources>
     <DockPanel>
         <StackPanel DockPanel.Dock="Left" Orientation="Vertical">
             <StackPanel Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
-                    <Label Content="Id: " Padding="5"/>
-                    <Label Content="Product Id: " Padding="5"/>
-                    <Label Content="Quantity: " Padding="5"/>
-                    <Label Content="{Binding ValueDisplay}" Padding="5"/>
-                    <Label Content="Date: " Padding="5"/>
+                    <Label Content="Id: " Padding="5" Margin="5" />
+                    <Label Content="Product Id: " Padding="5" Margin="5"/>
+                    <Label Content="Quantity: " Padding="5" Margin="5"/>
+                    <Label Content="{Binding ValueDisplay}" Padding="5" Margin="5"/>
+                    <Label Content="Date: " Padding="5" Margin="5"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBox Width="80" Text="{Binding Id}" IsEnabled="False" Padding="5"/>
-                    <TextBox Width="80" Text="{Binding ProductId}" IsEnabled="False" Padding="5"/>
+                    <TextBox Width="80" Text="{Binding Id}" IsEnabled="False" Padding="5" Margin="5"/>
+                    <TextBox Width="80" Text="{Binding ProductId}" IsEnabled="False" Padding="5" Margin="5"/>
                     <TextBox Width="80" Text="{Binding Quantity, Converter={StaticResource StringToDecimal}}" 
-                             IsEnabled="{Binding CanSetQuantity}" Padding="5"/>
+                             IsEnabled="{Binding CanSetQuantity}" Padding="5" Margin="5"/>
                     <TextBox Width="80" Text="{Binding Value, Converter={StaticResource StringToDecimal}}" 
-                             Padding="5"/>
-                    <TextBox Width="80" Text="{Binding Date}" IsEnabled="False" Padding="5"/>
+                             Padding="5" Margin="5"/>
+                    <TextBox Width="80" Text="{Binding Date}" IsEnabled="False" Padding="5" Margin="5"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel>
-                <Button Content="Delete" IsEnabled="{Binding CanDelete}" Command="{Binding DeleteRecord}"/>
-                <Button Content="Fill" IsEnabled="{Binding CanFill}" Command="{Binding FillRecord}"/>
-                <Button Content="Release" IsEnabled="{Binding CanRelease}" Command="{Binding ReleaseRecord}"/>
+                <Button Content="Delete" IsEnabled="{Binding CanDelete}" Padding="5" Margin="5" Command="{Binding DeleteRecord}"/>
+                <Button Content="Fill" Visibility="{Binding CanFill, Converter={StaticResource BoolToVis}}" Padding="5" Margin="5"  Command="{Binding FillRecord}"/>
+                <Button Content="Release" Visibility="{Binding CanRelease, Converter={StaticResource BoolToVis}}" Padding="5" Margin="5" Command="{Binding ReleaseRecord}"/>
             </StackPanel>
         </StackPanel>
         

@@ -11,6 +11,7 @@ using Inventory_Management.Utils.Events.Record;
 using Inventory_Management.Utils.Extensions;
 using Inventory_Management.View.Product;
 using Inventory_Management.View.Record;
+using Inventory_Management.ViewModel.Record;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prism.Events;
@@ -179,6 +180,17 @@ namespace Inventory_Management.ViewModel.Product
                 _eventAggregator.GetEvent<RefreshRecordList>().Publish();
             });
         }
+
+        private void OnReceiveProduct() => OnRecord(RecordType.Received);
+        private void OnSellProduct() => OnRecord(RecordType.Receipt);
+
+        private void OnRecord(RecordType recordType)
+        {
+            OpenOrActivate<RecordEntry>(() =>
+            {
+                _eventAggregator.GetEvent<CreateRecordEvent>().Publish((recordType, Id));
+            });
+        }
         
         public ICommand SaveProduct => CommandHelper.CreateCommandAsync(OnSaveProduct);
         public ICommand DeleteProduct => CommandHelper.CreateCommandAsync(OnDeleteProduct);
@@ -189,7 +201,7 @@ namespace Inventory_Management.ViewModel.Product
         /// TODO: Add open Record List will be a Pub/Sub that passes in the product id for the search.
         /// </summary>
         /// <exception cref="NotImplementedException"></exception>
-        public ICommand OpenReceive => CommandHelper.CreateCommand(()=> throw new NotImplementedException());
-        public ICommand OpenSell => CommandHelper.CreateCommand(()=> throw new NotImplementedException());
+        public ICommand OpenReceive => CommandHelper.CreateCommand(OnReceiveProduct);
+        public ICommand OpenSell => CommandHelper.CreateCommand(OnSellProduct);
     }
 }

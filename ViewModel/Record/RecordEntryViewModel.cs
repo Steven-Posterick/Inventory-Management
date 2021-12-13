@@ -162,7 +162,7 @@ namespace Inventory_Management.ViewModel.Record
                 Allocations = receiptRecord.Allocations.ToObservable();
                 CanRelease = !CanDelete;
                 Value = receiptRecord.Price ?? 0;
-                CanFill = false;
+                CanFill = true;
             }
             else if (await dbContext.ReceivedRecords.AnyAsync(x=> x.Id == id))
             {
@@ -171,8 +171,8 @@ namespace Inventory_Management.ViewModel.Record
                 RecordType = RecordType.Received;
                 Allocations = receivedRecord.Allocations.ToObservable();
                 CanRelease = false;
+                CanFill = false;
                 Value = receivedRecord.Cost ?? 0;
-                CanFill = true;
             }
             else
             {
@@ -229,12 +229,29 @@ namespace Inventory_Management.ViewModel.Record
 
         private async Task OnReleaseRecord()
         {
-            throw new NotImplementedException();
+            using var scope = ServiceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
+            
+            // Remove all the allocation records, then refresh the page.
+            dbContext.Allocations.RemoveRange(Allocations);
+            await dbContext.SaveChangesAsync();
+            _eventAggregator.GetEvent<OpenRecordEvent>().Publish(Id);
         }
 
         private async Task OnDeleteRecord()
         {
-            throw new NotImplementedException();
+            using var scope = ServiceProvider.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
+
+            // When it is not yet saved, the record will be null, thus you just close the screen.
+            var record = await dbContext.Records.FirstOrDefaultAsync(x => x.Id == Id);
+            if (record != null)
+            {
+                dbContext.Records.Remove(record);
+                await dbContext.SaveChangesAsync();
+            }
+            
+            _eventAggregator.GetEvent<CloseRecordEntry>().Publish();
         }
         
         private void OnOpenAllocation(AllocationReference reference)
