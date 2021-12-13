@@ -5,6 +5,7 @@ namespace Inventory_Management.View.Record
 {
     public partial class RecordList : Window
     {
+
         public RecordList(IRecordListViewModel viewModel)
         {
             InitializeComponent();

@@ -28,7 +28,7 @@
         </StackPanel>
         <ListView DockPanel.Dock="Bottom"
                   d:DataContext="{d:DesignInstance model:Product}"
-                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}" Height="414">
+                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}" Height="384">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="80" Header="Id">
@@ -51,9 +51,11 @@
             </ListView.View>
         </ListView>
         <StackPanel Width="980" Height="114">
-            <RadioButton Content="All" Height="20" Checked="RadioButton_Checked"/>
-            <RadioButton Content="Receipts" Height="18"/>
-            <RadioButton Content="Received"/>
+
+            <TextBox Text="Display Records" TextWrapping="Wrap" Width="980" Height="21"/>
+            <RadioButton Content="All" Height="20" IsChecked="True" GroupName="filter" Command="{Binding AllFilter}"/>
+            <RadioButton Content="Receipts" Height="20" GroupName="filter" Command="{Binding ReceivedFilter}"/>
+            <RadioButton Content="Received" GroupName="filter" Command="{Binding ReceiptFilter}"/>
         </StackPanel>
     </DockPanel>
 </Window>

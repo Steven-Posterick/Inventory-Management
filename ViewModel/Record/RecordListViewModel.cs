@@ -12,6 +12,7 @@ using Inventory_Management.View.Record;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prism.Events;
+using System.Linq;
 
 namespace Inventory_Management.ViewModel.Record
 {
@@ -58,7 +59,33 @@ namespace Inventory_Management.ViewModel.Record
             get => _productId;
             set => SetProperty(ref _productId, value);
         }
-        
+
+
+        public FilterType Filter { get; set; }
+        public ICommand AllFilter => CommandHelper.CreateCommand(() =>
+        {
+            Filter = FilterType.All;
+        });
+
+        public ICommand ReceiptFilter => CommandHelper.CreateCommand(() =>
+        {
+            Filter = FilterType.Receipt;
+        });
+
+        public ICommand ReceivedFilter => CommandHelper.CreateCommand(() =>
+        {
+            Filter = FilterType.Received;
+        });
+
+
+        public enum FilterType
+        {
+            All,
+            Receipt,
+            Received
+        }
+
+
         private async Task OnRefreshList()
         {
             // TODO: Query the list by the Id + ProductId
@@ -67,11 +94,27 @@ namespace Inventory_Management.ViewModel.Record
             using var scope = ServiceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
 
-            RecordEntries = (await dbContext.Records
-                .Include(x=> x.ReceivedRecord)
-                .Include(x=> x.ReceiptRecord)
-                .ToListAsync()).ToObservable();
+            IQueryable<Model.Record> queryable = dbContext.Records
+                .Include(x => x.ReceivedRecord)
+                .Include(x => x.ReceiptRecord);
+
+            queryable = Filter switch
+            {
+                FilterType.Receipt => queryable.Where(x => x.ReceiptRecord != null),
+                FilterType.Received => queryable.Where(x => x.ReceivedRecord != null),
+                _ => queryable
+            };
+
+            // Id, ProductId queries
+            if (int.TryParse(Id, out var id))
+                queryable = queryable.Where(x => x.Id == id);
+            else if (int.TryParse(ProductId, out var productid))
+                queryable = queryable.Where(x => x.ProductId == productid);
+
+            RecordEntries = (await queryable.ToListAsync()).ToObservable();
         }
+        
+        
         
         private void OnOpenRecord(int id)
         {
