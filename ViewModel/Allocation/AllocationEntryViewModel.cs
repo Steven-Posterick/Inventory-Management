@@ -52,11 +52,16 @@ namespace Inventory_Management.ViewModel.Allocation
             OpenOrActivate<RecordEntry>(() =>
             {
                 _eventAggregator.GetEvent<OpenRecordEvent>().Publish(ReceivedId);
-                //_eventAggregator.GetEvent<OpenRecordEvent>().Publish(ReceiptId);
             });
         });
 
         // OpenReceipt
-
+        public ICommand OpenReceipt => CommandHelper.CreateCommand(() =>
+        {
+            OpenOrActivate<RecordList>(() =>
+            {
+                _eventAggregator.GetEvent<OpenRecordEvent>().Publish(ReceiptId);
+            });
+        });
     }
 }
