@@ -25,10 +25,13 @@
             <StackPanel Orientation="Horizontal" Margin="10">
                 <Button Padding="5" Margin="10" Width="90" Height="44" Content="Refresh" Command="{Binding RefreshList}" />
             </StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="10">
+            <Button Padding="5" Margin="10" Width="90" Height="44" Content="Create Record" Command="{Binding CreateRecord}" />
+            </StackPanel>
         </StackPanel>
         <ListView DockPanel.Dock="Bottom"
                   d:DataContext="{d:DesignInstance model:Product}"
-                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}">
+                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}" Height="384">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Width="80" Header="Id">
@@ -36,7 +39,7 @@
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
                                     <Button Padding="2" Margin="3" Content="Open" Command="{Binding DataContext.OpenRecord, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Id}"/>
-                                    <TextBlock Padding="2" Margin="3" Text="{Binding Id}"/> 
+                                    <TextBlock Padding="2" Margin="3" Text="{Binding Id}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -50,5 +53,12 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <StackPanel Width="980" Height="114">
+
+            <TextBox Text="Display Records" TextWrapping="Wrap" Width="980" Height="21"/>
+            <RadioButton Content="All" Height="20" IsChecked="True" GroupName="filter" Command="{Binding AllFilter}"/>
+            <RadioButton Content="Receipts" Height="20" GroupName="filter" Command="{Binding ReceivedFilter}"/>
+            <RadioButton Content="Received" GroupName="filter" Command="{Binding ReceiptFilter}"/>
+        </StackPanel>
     </DockPanel>
 </Window>
