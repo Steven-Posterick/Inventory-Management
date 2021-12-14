@@ -31,24 +31,5 @@
                     <TextBox IsEnabled="False" Text="" Padding="5" Margin="5"/>
                 </StackPanel>
               
-              <ListView>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="80" Header="Receipt Id">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Padding="5" Margin="3"/>
-                                            <TextBlock Padding="5" Margin="3" Text="{Binding ReceiptId}"/> 
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Width="140" Header="Received Id" />
-                            <GridViewColumn Width="140" Header="Amount Allocated" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-              
             </StackPanel>
 </Window>
