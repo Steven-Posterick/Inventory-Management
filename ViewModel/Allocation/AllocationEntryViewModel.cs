@@ -63,5 +63,16 @@ namespace Inventory_Management.ViewModel.Allocation
                 _eventAggregator.GetEvent<OpenRecordEvent>().Publish(ReceiptId);
             });
         });
+
+        // connect to database to show allocated quantity on allocation screen
+        private int _allocatedQuantity;
+        public int AllocatedQuantity
+        {
+            get => _allocatedQuantity;
+            set => SetProperty(ref _allocatedQuantity, value);
+        }
+
+
+
     }
 }

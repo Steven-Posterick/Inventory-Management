@@ -41,7 +41,7 @@
                 <!--Allocated Quantity-->
                 <StackPanel Orientation="Vertical">
                     <Label Content="Allocated Quantity" Padding="5" Margin="5"/>
-                    <TextBox IsEnabled="False" Padding="5" Margin="5" Text="{Binding ReceivedId}"/>
+                    <TextBox IsEnabled="False" Padding="5" Margin="5" Text="{Binding AllocatedQuantity}"/>
                 </StackPanel>
            
     </StackPanel>
