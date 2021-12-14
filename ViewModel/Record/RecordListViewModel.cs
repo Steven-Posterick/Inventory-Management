@@ -105,23 +105,12 @@ namespace Inventory_Management.ViewModel.Record
             // Id, ProductId queries
             if (int.TryParse(Id, out var id))
                 queryable = queryable.Where(x => x.Id == id);
-            else if (int.TryParse(ProductId, out var productid))
-                queryable = queryable.Where(x => x.ProductId == productid);
+            else if (int.TryParse(ProductId, out var productId))
+                queryable = queryable.Where(x => x.ProductId == productId);
 
-            RecordEntries = (await queryable.ToListAsync()).ToObservable();
+            RecordEntries = (await queryable.OrderBy(x=> x.Id).ToListAsync()).ToObservable();
         }
-
-        /// <summary>
-        /// Creating a record will open product entry screen without an id.
-        /// </summary>
-        private void OnCreateRecord() => OpenRecordEntry();
-
-        /// <summary>
-        /// Opening a record simply has an id of not 0.
-        /// </summary>
-        /// <param name="id"></param>
-        private void OnOpenRecord(int id) => OpenRecordEntry(id);
-
+        
         private void OpenRecordEntry(int id = 0)
         {
             OpenOrActivate<RecordEntry>(() =>
@@ -131,7 +120,6 @@ namespace Inventory_Management.ViewModel.Record
         }
         
         public ICommand RefreshList => CommandHelper.CreateCommandAsync(OnRefreshList);
-        public ICommand CreateRecord => CommandHelper.CreateCommand(OnCreateRecord);
         public ICommand OpenRecord => CommandHelper.CreateCommand<int>(OpenRecordEntry);
     }
 }
