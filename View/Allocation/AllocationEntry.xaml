@@ -20,10 +20,10 @@
                     <TextBox IsEnabled="False" Text="" Padding="5" Margin="5"/>
                 </StackPanel>
 
-                <!--button to open associated record-->
+                <!--button to open associated record and hopefully associated receipt-->
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="Open" Padding="5" Margin="10" Height="40" Width="50" RenderTransformOrigin="0.483,2.823"/>
+                        <Button Content="Open" Padding="5" Margin="10" Height="40" Width="50" RenderTransformOrigin="0.483,2.823" Command="{Binding OpenReceived}" />
                         <TextBox IsEnabled="False" Text=""/>
                     </StackPanel>
                 </StackPanel>
