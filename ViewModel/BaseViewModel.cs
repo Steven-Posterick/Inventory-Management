@@ -34,13 +34,17 @@ namespace Inventory_Management.ViewModel
             OnPropertyChanged(propertyName);
         }
 
-        protected void OpenOrActivate<TWindow>() where TWindow : Window
+        protected void OpenOrActivate<TWindow>() where TWindow : Window => OpenOrActivate<TWindow>(null);
+
+        protected void OpenOrActivate<TWindow>(Action postAction) where TWindow : Window
         { 
             var window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x is TWindow);
             if (window == null)
                 ServiceProvider.GetService<TWindow>()?.Show();
             else
                 window.Activate();
+            
+            postAction?.Invoke();
         }
     }
 }

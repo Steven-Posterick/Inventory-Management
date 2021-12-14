@@ -19,6 +19,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.10" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+    <PackageReference Include="ValueConverters" Version="2.3.6-pre" />
   </ItemGroup>
 
   <ItemGroup>

@@ -52,8 +52,6 @@ namespace Inventory_Management.Context
             {
                 entity.ToTable("Product");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Cost).HasPrecision(18, 2);
 
                 entity.Property(e => e.Description).HasMaxLength(50);
@@ -68,6 +66,12 @@ namespace Inventory_Management.Context
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Price).HasPrecision(18, 2);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.ReceiptRecord)
+                    .HasForeignKey<ReceiptRecord>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkey_RecordId");
             });
 
             modelBuilder.Entity<ReceivedRecord>(entity =>
@@ -77,13 +81,17 @@ namespace Inventory_Management.Context
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Cost).HasPrecision(18, 2);
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.ReceivedRecord)
+                    .HasForeignKey<ReceivedRecord>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fkey_RecordId");
             });
 
             modelBuilder.Entity<Record>(entity =>
             {
                 entity.ToTable("Record");
-
-                entity.Property(e => e.RecordId).ValueGeneratedNever();
 
                 entity.Property(e => e.Date).HasColumnType("date");
 
@@ -91,18 +99,6 @@ namespace Inventory_Management.Context
                     .WithMany(p => p.Records)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("ProductId");
-
-                entity.HasOne(d => d.RecordNavigation)
-                    .WithOne(p => p.Record)
-                    .HasForeignKey<Record>(d => d.RecordId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Receipt_RecordId_fkey");
-
-                entity.HasOne(d => d.Record1)
-                    .WithOne(p => p.Record)
-                    .HasForeignKey<Record>(d => d.RecordId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Received_RecordId_fkey");
             });
 
             OnModelCreatingPartial(modelBuilder);

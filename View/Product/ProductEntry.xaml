@@ -3,10 +3,47 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:Inventory_Management.View.Product"
+        xmlns:vm="clr-namespace:Inventory_Management.ViewModel.Product"
+        xmlns:valueConverters="clr-namespace:ValueConverters;assembly=ValueConverters"
         mc:Ignorable="d"
-        Title="ProductEntry" Height="450" Width="800">
+        d:DataContext="{d:DesignInstance vm:ProductEntryViewModel}"
+        Title="Product Entry" Height="250" Width="680">
+    
+    <Window.Resources>
+        <ResourceDictionary> 
+            <valueConverters:StringToDecimalConverter x:Key="DecimalConverter"/> 
+            <valueConverters:BoolToVisibilityConverter x:Key="BoolToVisible"/> 
+        </ResourceDictionary> 
+    </Window.Resources>
+    
     <Grid>
         
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+            <StackPanel Orientation="Vertical">
+                <Label Padding="5" HorizontalAlignment="Left" Content="Product Id" Margin="10,1"/>
+                <TextBox Padding="5" HorizontalAlignment="Left" Text="{Binding Id}" Margin="10,1" TextWrapping="Wrap" Width="160" IsEnabled="False"/>
+                <Label Padding="5" HorizontalAlignment="Left" Content="Description:" Margin="10, 1"/>
+                <TextBox Padding="5" HorizontalAlignment="Left" Text="{Binding Description}" Margin="10,1" TextWrapping="Wrap" Width="160"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top">
+                <Label Padding="5" HorizontalAlignment="Left" Content="Price:" Margin="10,1" VerticalAlignment="Top"/>
+                <TextBox Padding="5" HorizontalAlignment="Left" Text="{Binding Price, Converter={StaticResource DecimalConverter}}" Margin="10,1" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+                <Label Padding="5" HorizontalAlignment="Left" Content="Cost:" Margin="10,1" VerticalAlignment="Top"/>    
+                <TextBox Padding="5" HorizontalAlignment="Left" Text="{Binding Cost, Converter={StaticResource DecimalConverter}}" Margin="10,1" TextWrapping="Wrap" VerticalAlignment="Top" Width="160"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+            <Button Command="{Binding SaveProduct}" Content="Save Product" Margin="10" VerticalAlignment="Top" Height="32" Width="110"/>
+            
+            <!--Only visible when it is not a new record.-->
+            <StackPanel Orientation="Horizontal" Visibility="{Binding IsCreated, Converter={StaticResource BoolToVisible}}">
+                <Button Command="{Binding DeleteProduct}" Content="Delete Product" Margin="10" VerticalAlignment="Top" Height="32" Width="110"/>
+                <Button Command="{Binding OpenReceive}" Content="Receive Product" Margin="10" VerticalAlignment="Top" Height="32" Width="110"/>
+                <Button Command="{Binding OpenSell}" Content="Sell Product" Margin="10" VerticalAlignment="Top" Height="32" Width="110"/>
+                <Button Command="{Binding OpenRecordList}" Content="View Records" Margin="10" VerticalAlignment="Top" Height="32" Width="110"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

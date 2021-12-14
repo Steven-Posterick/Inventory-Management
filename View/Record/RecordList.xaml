@@ -4,9 +4,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Inventory_Management.View.Record"
+        xmlns:record="clr-namespace:Inventory_Management.ViewModel.Record"
+        xmlns:model="clr-namespace:Inventory_Management.Model"
         mc:Ignorable="d"
-        Title="RecordList" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        d:DataContext="{d:DesignInstance record:RecordListViewModel}"
+        Title="Record List" Height="600" Width="1000">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="Id" />
+                    <TextBox Width="80" Text="{Binding Id}" Padding="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="Product Id" />
+                    <TextBox Width="80" Text="{Binding ProductId}" Padding="5"/>
+                </StackPanel>
+            </StackPanel>
+            <!--Buttons-->
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <Button Padding="5" Margin="10" Width="90" Height="44" Content="Refresh" Command="{Binding RefreshList}" />
+            </StackPanel>
+        </StackPanel>
+        <ListView DockPanel.Dock="Bottom"
+                  d:DataContext="{d:DesignInstance model:Product}"
+                  ItemsSource="{Binding DataContext.RecordEntries, RelativeSource={RelativeSource AncestorType=Window}}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="80" Header="Id">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Padding="2" Margin="3" Content="Open" Command="{Binding DataContext.OpenRecord, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding Id}"/>
+                                    <TextBlock Padding="2" Margin="3" Text="{Binding Id}"/> 
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="140" Header="Product Id" DisplayMemberBinding="{Binding ProductId}" />
+                    <GridViewColumn Width="140" Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
+                    <GridViewColumn Width="140" Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
+                    <GridViewColumn Width="140" Header="Cost" DisplayMemberBinding="{Binding ReceivedRecord.Cost}" />
+                    <GridViewColumn Width="140" Header="Price" DisplayMemberBinding="{Binding ReceiptRecord.Price}" />
+                    <GridViewColumn Width="140" Header="Date" DisplayMemberBinding="{Binding Date}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
 </Window>

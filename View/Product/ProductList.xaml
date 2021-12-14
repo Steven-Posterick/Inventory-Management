@@ -4,32 +4,50 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:vm="clr-namespace:Inventory_Management.ViewModel.Product"
+        xmlns:model="clr-namespace:Inventory_Management.Model"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance vm:ProductListViewModel}"
-        Title="ProductList" Height="450" Width="800">
+        Title="Product List" Height="450" Width="800">
     <DockPanel>
-        <!--Search Fields-->
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-            <StackPanel Orientation="Vertical" Margin="10">
-                <Label Content="Id"/>
-                <TextBox Width="40" Text="{Binding IdText}"/>
+            <!--Search Fields-->
+            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="Id" />
+                    <TextBox Width="80" Text="{Binding Id}" Padding="5"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Margin="10">
+                    <Label Content="Description"/>
+                    <TextBox Width="100" Text="{Binding Description}" Padding="5"/>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Margin="10">
-                <Label Content="Description"/>
-                <TextBox Width="100" Text="{Binding Description}"/>
+            
+            <!--Buttons-->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
+                <Button Padding="5" Margin="10" Width="90" Height="44" Content="Refresh" Command="{Binding RefreshList}" />
+                <Button Padding="5" Margin="10" Width="90" Height="44" Content="Add Product" Command="{Binding CreateProduct}" />
             </StackPanel>
-            <!--TODO: Add Desc/Asc-->
         </StackPanel>
         
-        <!--Buttons-->
-        <Button DockPanel.Dock="Top" HorizontalAlignment="Left" Padding="2" Margin="10" Width="150" Height="20" Content="Refresh" Command="{Binding RefreshList}" />
-        
-        <ListView DockPanel.Dock="Bottom" ItemsSource="{Binding ProductEntries}">
+        <ListView DockPanel.Dock="Bottom" 
+                  ItemsSource="{Binding DataContext.ProductEntries, RelativeSource={RelativeSource AncestorType=Window}}"
+                  d:DataContext="{d:DesignInstance model:Product}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="140" Header="Id" DisplayMemberBinding="{Binding Id}" />
+                    <GridViewColumn Width="80" Header="Id">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Button Padding="2" Margin="3" Content="Open" Command="{Binding DataContext.OpenProduct, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                            CommandParameter="{Binding Id}"/>
+                                    <TextBlock Padding="2" Margin="3" Text="{Binding Id}"/> 
+                                </StackPanel>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Width="140" Header="Description" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Width="140" Header="Cost" DisplayMemberBinding="{Binding Cost}" />
+                    <GridViewColumn Width="140" Header="Price" DisplayMemberBinding="{Binding Price, StringFormat='{}{0:C}'}" />
+                    <GridViewColumn Width="140" Header="Cost" DisplayMemberBinding="{Binding Cost, StringFormat='{}{0:C}'}" />
                 </GridView>
             </ListView.View>
         </ListView>
