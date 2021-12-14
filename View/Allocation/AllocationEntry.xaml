@@ -6,7 +6,49 @@
         xmlns:local="clr-namespace:Inventory_Management.View.Allocation"
         mc:Ignorable="d"
         Title="AllocationEntry" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+          <StackPanel Orientation="Horizontal">
+                <!--Receipt Id-->
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Receipt Id" Padding="5" Margin="5"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Open" Padding="5" Margin="10" Height="40" Width="200"/>
+                        <TextBox IsEnabled="False" Text=""/>
+                    </StackPanel>
+                </StackPanel>
+                
+                <!--Received Id-->
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Received Id" Padding="5" Margin="5"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Open" Padding="5" Margin="10" Height="40" Width="200"/>
+                        <TextBox Padding="5" Margin="5" IsEnabled="False" Text=""/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!--Allocated Quantity-->
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Allocated Quantity" Padding="5" Margin="5"/>
+                    <TextBox IsEnabled="False" Text="" Padding="5" Margin="5"/>
+                </StackPanel>
+              
+              <ListView>
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Width="80" Header="Receipt Id">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Padding="5" Margin="3"/>
+                                            <TextBlock Padding="5" Margin="3" Text="{Binding ReceiptId}"/> 
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Width="140" Header="Received Id" />
+                            <GridViewColumn Width="140" Header="Amount Allocated" />
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+              
+            </StackPanel>
 </Window>
