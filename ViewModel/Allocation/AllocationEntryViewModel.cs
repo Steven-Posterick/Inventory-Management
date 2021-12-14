@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Inventory_Management.Context;
 using Inventory_Management.Utils.Command;
 using Inventory_Management.Utils.Events.Allocation;
 using Inventory_Management.Utils.Events.Record;
 using Inventory_Management.View.Record;
+using Microsoft.Extensions.DependencyInjection;
 using Prism.Events;
 
 namespace Inventory_Management.ViewModel.Allocation
@@ -32,6 +35,11 @@ namespace Inventory_Management.ViewModel.Allocation
         {
             ReceiptId = receiptId;
             ReceivedId = receivedId;
+            var scope = ServiceProvider.CreateScope();
+            var context = scope.ServiceProvider.GetService<InventoryManagementContext>();
+            var allocation = context.Allocations.FirstOrDefault(a => a.ReceiptID == receiptId && a.ReceivedId == receivedId);
+
+            AllocatedQuantity = allocation?.AllocatedQuantity ?? 0;
         }
 
         private readonly IEventAggregator _eventAggregator;
@@ -70,9 +78,10 @@ namespace Inventory_Management.ViewModel.Allocation
         {
             get => _allocatedQuantity;
             set => SetProperty(ref _allocatedQuantity, value);
+            
+            
         }
 
-
-
+        
     }
 }
