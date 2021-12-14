@@ -4,35 +4,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:Inventory_Management.View.Allocation"
+        xmlns:allocation="clr-namespace:Inventory_Management.ViewModel.Allocation"
         mc:Ignorable="d"
-        Title="AllocationEntry" Height="450" Width="800">
-          <StackPanel Orientation="Horizontal">
-              
-                <!--Receipt Id-->
-                <StackPanel Orientation="Vertical">
-                    <Label Content="Receipt ID" Padding="5" Margin="5"/>
-                    <TextBox IsEnabled="False" Text="" Padding="5" Margin="5"/>
-                </StackPanel>
-                
-                <!--Received Id-->
-                <StackPanel Orientation="Vertical">
-                    <Label Content="Received ID" Padding="5" Margin="5"/>
-                    <TextBox IsEnabled="False" Text="" Padding="5" Margin="5"/>
-                </StackPanel>
+        Title="AllocationEntry" Height="450" Width="800"
+        d:DataContext="{d:DesignInstance allocation:AllocationEntryViewModel}">
+    <StackPanel Orientation="Horizontal">
 
-                <!--button to open associated record and hopefully associated receipt-->
-                <StackPanel Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="Open" Padding="5" Margin="10" Height="40" Width="50" RenderTransformOrigin="0.483,2.823" Command="{Binding OpenReceived}" />
-                        <TextBox IsEnabled="False" Text=""/>
-                    </StackPanel>
-                </StackPanel>
-              
-                <!--Allocated Quantity-->
-                <StackPanel Orientation="Vertical">
-                    <Label Content="Allocated Quantity" Padding="5" Margin="5"/>
-                    <TextBox IsEnabled="False" Text="" Padding="5" Margin="5"/>
-                </StackPanel>
-              
+        <!--Receipt Id-->
+        <StackPanel Orientation="Vertical">
+            <Label Content="Receipt ID" Padding="5" Margin="5" />
+            <TextBox IsEnabled="False" Text="" Padding="5" Margin="5" />
+        </StackPanel>
+
+        <!--Received Id-->
+        <StackPanel Orientation="Vertical">
+            <Label Content="Received ID" Padding="5" Margin="5" />
+            <TextBox IsEnabled="False" Text="" Padding="5" Margin="5" />
+        </StackPanel>
+
+        <!--button to open associated record and hopefully associated receipt-->
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Open" Padding="5" Margin="10" Height="40" Width="50"
+                        RenderTransformOrigin="0.483,2.823" Command="{Binding OpenReceived}" />
+                <TextBox IsEnabled="False" Text="" />
             </StackPanel>
+        </StackPanel>
+
+        <!--Allocated Quantity-->
+        <StackPanel Orientation="Vertical">
+            <Label Content="Allocated Quantity" Padding="5" Margin="5" />
+            <TextBox IsEnabled="False" Text="" Padding="5" Margin="5" />
+        </StackPanel>
+
+    </StackPanel>
 </Window>
