@@ -33,6 +33,7 @@ namespace Inventory_Management.ViewModel.Record
         private bool _canFill;
         private string _valueDisplay;
         private decimal _value;
+        private bool _canSetQuantity;
         private ObservableCollection<Model.Allocation> _allocations = new ObservableCollection<Model.Allocation>();
 
         public RecordEntryViewModel(IServiceProvider serviceProvider, IEventAggregator eventAggregator, IMessage message) : base(serviceProvider)
@@ -115,8 +116,8 @@ namespace Inventory_Management.ViewModel.Record
         
         public bool CanSetQuantity
         {
-            get => _canDelete;
-            set => SetProperty(ref _canDelete, value);
+            get => _canSetQuantity;
+            set => SetProperty(ref _canSetQuantity, value);
         }
         
         public bool CanFill
@@ -200,12 +201,10 @@ namespace Inventory_Management.ViewModel.Record
             using var scope = ServiceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
 
-            var validRecords = dbContext.ReceiptRecords.Where(x =>
-                x.IdNavigation.ProductId == ProductId &&
-                x.IdNavigation.Quantity < x.Allocations.Sum(x => x.AllocatedQuantity));
+            var validRecords = dbContext.ReceivedRecords.Where(x => x.IdNavigation.ProductId == ProductId);
             
             var count = 0;
-            await foreach (var record in validRecords.AsAsyncEnumerable())
+            foreach (var record in await validRecords.ToListAsync())
             {
                 count++;
                 // This will call a parameterized SQL query.
@@ -244,14 +243,21 @@ namespace Inventory_Management.ViewModel.Record
             var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
 
             // When it is not yet saved, the record will be null, thus you just close the screen.
-            var record = await dbContext.Records.FirstOrDefaultAsync(x => x.Id == Id);
+            var record = await dbContext.Records.Include(x=> x.ReceivedRecord).Include(x=> x.ReceiptRecord).FirstOrDefaultAsync(x => x.Id == Id);
             if (record != null)
             {
+                
+                if (record.ReceiptRecord != null)
+                    dbContext.ReceiptRecords.Remove(record.ReceiptRecord);
+                if (record.ReceivedRecord != null)
+                    dbContext.ReceivedRecords.Remove(record.ReceivedRecord);
+                
                 dbContext.Records.Remove(record);
                 await dbContext.SaveChangesAsync();
             }
             
             _eventAggregator.GetEvent<CloseRecordEntry>().Publish();
+            _eventAggregator.GetEvent<RefreshRecordList>().Publish();
         }
         
         private void OnOpenAllocation(AllocationReference reference)
@@ -261,11 +267,94 @@ namespace Inventory_Management.ViewModel.Record
                 _eventAggregator.GetEvent<OpenAllocationEvent>().Publish(reference);
             });
         }
+
+        private bool ValidateForSave()
+        {
+            if (Quantity <= 0)
+            {
+                _message.Notify("Quantity must be greater than 0.");
+                return false;
+            }
+
+            if (Value <= 0)
+            {
+                _message.Notify("Cost/Price must be greater than 0.");
+                return false;
+            }
+
+            return true;
+        }
+        
+        private async Task OnSaveRecord()
+        {
+            if (ValidateForSave())
+            {
+                Model.Record record;
+                
+                using var scope = ServiceProvider.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
+                
+                if (Id == 0)
+                {
+                    record = new Model.Record();
+                    if (RecordType == RecordType.Receipt)
+                    {
+                        record.ReceiptRecord = new ReceiptRecord();
+                    }
+                    else
+                    {
+                        record.ReceivedRecord = new ReceivedRecord();
+                    }
+                }
+                else
+                {
+                    record = await dbContext.Records
+                        .Include(x=> x.ReceiptRecord)
+                        .Include(x=> x.ReceivedRecord)
+                        .FirstAsync(x => x.Id == Id);
+                }
+
+                if (record.ReceivedRecord != null)
+                {
+                    record.ReceivedRecord.Cost = Value;
+                }
+                else if (record.ReceiptRecord != null)
+                {
+                    record.ReceiptRecord.Price = Value;
+                }
+
+                record.ProductId = ProductId;
+                record.Quantity = Quantity;
+                record.Date = DateTime.Now;
+
+                if (Id == 0)
+                {
+                    if (record.ReceiptRecord != null)
+                    {
+                        record.ReceiptRecord.IdNavigation = record;
+                        dbContext.ReceiptRecords.Add(record.ReceiptRecord);
+                    }
+                    else if (record.ReceivedRecord != null)
+                    {
+                        record.ReceivedRecord.IdNavigation = record;
+                        dbContext.ReceivedRecords.Add(record.ReceivedRecord);
+                    }
+                }
+
+                await dbContext.SaveChangesAsync();
+                Id = record.Id;
+                
+                _eventAggregator.GetEvent<OpenRecordEvent>().Publish(Id);
+                _eventAggregator.GetEvent<RefreshRecordList>().Publish();
+            } 
+            
+        }
         
         public ICommand FillRecord => CommandHelper.CreateCommandAsync(OnFillRecord);
         public ICommand ReleaseRecord => CommandHelper.CreateCommandAsync(OnReleaseRecord);
         public ICommand DeleteRecord => CommandHelper.CreateCommandAsync(OnDeleteRecord);
         public ICommand OpenAllocation => CommandHelper.CreateCommand<AllocationReference>(OnOpenAllocation);
+        public ICommand SaveRecord => CommandHelper.CreateCommandAsync(OnSaveRecord);
     }
 
     public enum RecordType

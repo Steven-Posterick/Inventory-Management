@@ -6,13 +6,15 @@
         xmlns:model="clr-namespace:Inventory_Management.Model"
         xmlns:record="clr-namespace:Inventory_Management.ViewModel.Record"
         xmlns:valueConverters="clr-namespace:ValueConverters;assembly=ValueConverters"
+        xmlns:converters="clr-namespace:Inventory_Management.Utils.Converters"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance record:RecordEntryViewModel}"
-        Title="Record Entry" Height="450" Width="800">
+        Title="Record Entry" Height="450" Width="700">
     <Window.Resources>
         <ResourceDictionary> 
             <valueConverters:StringToDecimalConverter x:Key="StringToDecimal"/> 
             <valueConverters:BoolToVisibilityConverter x:Key="BoolToVis"/> 
+            <converters:StringToInt x:Key="StringToInt"/> 
         </ResourceDictionary> 
     </Window.Resources>
     <DockPanel>
@@ -28,7 +30,7 @@
                 <StackPanel>
                     <TextBox Width="80" Text="{Binding Id}" IsEnabled="False" Padding="5" Margin="5"/>
                     <TextBox Width="80" Text="{Binding ProductId}" IsEnabled="False" Padding="5" Margin="5"/>
-                    <TextBox Width="80" Text="{Binding Quantity, Converter={StaticResource StringToDecimal}}" 
+                    <TextBox Width="80" Text="{Binding Quantity, Converter={StaticResource StringToInt}}" 
                              IsEnabled="{Binding CanSetQuantity}" Padding="5" Margin="5"/>
                     <TextBox Width="80" Text="{Binding Value, Converter={StaticResource StringToDecimal}}" 
                              Padding="5" Margin="5"/>
@@ -36,6 +38,7 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel>
+                <Button Content="Save" Padding="5" Margin="5" Command="{Binding SaveRecord}"/>
                 <Button Content="Delete" IsEnabled="{Binding CanDelete}" Padding="5" Margin="5" Command="{Binding DeleteRecord}"/>
                 <Button Content="Fill" Visibility="{Binding CanFill, Converter={StaticResource BoolToVis}}" Padding="5" Margin="5"  Command="{Binding FillRecord}"/>
                 <Button Content="Release" Visibility="{Binding CanRelease, Converter={StaticResource BoolToVis}}" Padding="5" Margin="5" Command="{Binding ReleaseRecord}"/>
@@ -43,6 +46,7 @@
         </StackPanel>
         
         <ListView DockPanel.Dock="Right"
+                  Margin="10"
                   d:DataContext="{d:DesignInstance model:Allocation}"
                   ItemsSource="{Binding DataContext.Allocations, RelativeSource={RelativeSource AncestorType=Window}}">
             <ListView.View>
