@@ -8,7 +8,6 @@ namespace Inventory_Management.Model
     public partial class Allocation
     {
         public int ReceiptId { get; set; }
-        public int ReceiptID { get; internal set; }
         public int ReceivedId { get; set; }
         public int? AllocatedQuantity { get; set; }
 

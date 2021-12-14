@@ -37,7 +37,7 @@ namespace Inventory_Management.ViewModel.Allocation
             ReceivedId = receivedId;
             var scope = ServiceProvider.CreateScope();
             var context = scope.ServiceProvider.GetService<InventoryManagementContext>();
-            var allocation = context.Allocations.FirstOrDefault(a => a.ReceiptID == receiptId && a.ReceivedId == receivedId);
+            var allocation = context.Allocations.FirstOrDefault(a => a.ReceiptId == receiptId && a.ReceivedId == receivedId);
 
             AllocatedQuantity = allocation?.AllocatedQuantity ?? 0;
         }
@@ -66,7 +66,7 @@ namespace Inventory_Management.ViewModel.Allocation
         // OpenReceipt
         public ICommand OpenReceipt => CommandHelper.CreateCommand(() =>
         {
-            OpenOrActivate<RecordList>(() =>
+            OpenOrActivate<RecordEntry>(() =>
             {
                 _eventAggregator.GetEvent<OpenRecordEvent>().Publish(ReceiptId);
             });
@@ -78,8 +78,6 @@ namespace Inventory_Management.ViewModel.Allocation
         {
             get => _allocatedQuantity;
             set => SetProperty(ref _allocatedQuantity, value);
-            
-            
         }
 
         
