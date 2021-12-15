@@ -84,8 +84,8 @@ namespace Inventory_Management.ViewModel.Record
 
                 ValueDisplay = value switch
                 {
-                    RecordType.Receipt => "Cost: ",
-                    RecordType.Received => "Price: ",
+                    RecordType.Receipt => "Price: ",
+                    RecordType.Received => "Cost: ",
                     _ => null
                 };
                 

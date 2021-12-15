@@ -51,7 +51,6 @@
                     </GridViewColumn>
                     <GridViewColumn Width="140" Header="Product Id" DisplayMemberBinding="{Binding ProductId}" />
                     <GridViewColumn Width="140" Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
-                    <GridViewColumn Width="140" Header="Quantity" DisplayMemberBinding="{Binding Quantity}" />
                     <GridViewColumn Width="140" Header="Cost" DisplayMemberBinding="{Binding ReceivedRecord.Cost}" />
                     <GridViewColumn Width="140" Header="Price" DisplayMemberBinding="{Binding ReceiptRecord.Price}" />
                     <GridViewColumn Width="140" Header="Date" DisplayMemberBinding="{Binding Date}" />

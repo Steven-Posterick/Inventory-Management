@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
-<<<<<<< HEAD
-using Inventory_Management.Utils.Events.Allocation;
-=======
 using System.Windows.Input;
 using Inventory_Management.Context;
 using Inventory_Management.Utils.Command;
@@ -11,7 +7,6 @@ using Inventory_Management.Utils.Events.Allocation;
 using Inventory_Management.Utils.Events.Record;
 using Inventory_Management.View.Record;
 using Microsoft.Extensions.DependencyInjection;
->>>>>>> megans-branch
 using Prism.Events;
 
 namespace Inventory_Management.ViewModel.Allocation
@@ -20,8 +15,6 @@ namespace Inventory_Management.ViewModel.Allocation
     
     public class AllocationEntryViewModel : BaseViewModel, IAllocationEntryViewModel
     {
-<<<<<<< HEAD
-=======
         private int _receiptId;
         private int _receivedId;
 
@@ -42,7 +35,7 @@ namespace Inventory_Management.ViewModel.Allocation
             ReceiptId = receiptId;
             ReceivedId = receivedId;
             var scope = ServiceProvider.CreateScope();
-            var context = scope.ServiceProvider.GetService<InventoryManagementContext>();
+            var context = scope.ServiceProvider.GetRequiredService<InventoryManagementContext>();
             var allocation = context.Allocations.FirstOrDefault(a => a.ReceiptId == receiptId && a.ReceivedId == receivedId);
 
             AllocatedQuantity = allocation?.AllocatedQuantity ?? 0;
@@ -50,21 +43,19 @@ namespace Inventory_Management.ViewModel.Allocation
 
         private readonly IEventAggregator _eventAggregator;
 
->>>>>>> megans-branch
         public AllocationEntryViewModel(IServiceProvider serviceProvider, IEventAggregator eventAggregator) : base(serviceProvider)
         {
+            _eventAggregator = eventAggregator;
+            
             eventAggregator.GetEvent<OpenAllocationEvent>().Subscribe(x =>
             {
                 OpenAllocation(x.ReceiptId, x.ReceivedId);
             });
         }
 
-        private void OpenAllocation(int receiptId, int receivedId)
+        // OpenReceived
+        public ICommand OpenReceived => CommandHelper.CreateCommand(() =>
         {
-<<<<<<< HEAD
-            
-        }
-=======
             OpenOrActivate<RecordEntry>(() =>
             {
                 _eventAggregator.GetEvent<OpenRecordEvent>().Publish(ReceivedId);
@@ -87,8 +78,5 @@ namespace Inventory_Management.ViewModel.Allocation
             get => _allocatedQuantity;
             set => SetProperty(ref _allocatedQuantity, value);
         }
-
-        
->>>>>>> megans-branch
     }
 }
