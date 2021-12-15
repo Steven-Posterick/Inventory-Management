@@ -52,3 +52,41 @@
               
             </StackPanel>
 </Window>
+        Title="AllocationEntry" Height="450" Width="800">
+          <StackPanel Orientation="Horizontal">
+              
+                <!--Receipt Id-->
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Receipt ID" Padding="5" Margin="5"/>
+                    <TextBox IsEnabled="False" Padding="5" Margin="5" Text="{Binding ReceivedId}"/>
+                </StackPanel>
+                
+                <!--Received Id-->
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Received ID" Padding="5" Margin="5"/>
+                    <TextBox IsEnabled="False" Padding="5" Margin="5" Text="{Binding ReceivedId}"/>
+                </StackPanel>
+
+                <!--button to open associated record-->
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Open Received Record" Padding="5" Margin="10" Height="40" Width="175" RenderTransformOrigin="0.483,2.823" Command="{Binding OpenReceived}" />
+                        <TextBox IsEnabled="False" Text=""/>
+                    </StackPanel>
+                </StackPanel>
+              
+              <!--button to open associated receipt-->
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="Open Receipt Record" Padding="5" Margin="10" Height="40" Width="175" RenderTransformOrigin="0.483,2.823" Command="{Binding OpenReceipt}" />
+                        <TextBox IsEnabled="False" Text=""/>
+                    </StackPanel>
+                </StackPanel>
+              
+                <!--Allocated Quantity-->
+                <StackPanel Orientation="Vertical">
+                    <Label Content="Allocated Quantity" Padding="5" Margin="5"/>
+                    <TextBox IsEnabled="False" Padding="5" Margin="5" Text="{Binding AllocatedQuantity}"/>
+                </StackPanel>
+           
+</Window>
